@@ -2,6 +2,8 @@ const bars = 20;
 
 populateChart(randomList(bars));
 
+document.getElementById('resetChart').addEventListener('click', () => {resetChart(bars)});
+
 function resetChart(len) {
     const grid = document.getElementById('chartGrid');
     while (grid.firstChild) {
