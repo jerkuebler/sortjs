@@ -1,8 +1,36 @@
-const bars = 20;
+const algorithms = ['Merge Sort'];
+addSelectOptions(algorithms, 'algorithmSelect', "Choose Algorithm");
 
+const bars = 50;
 populateChart(randomList(bars));
 
 document.getElementById('resetChart').addEventListener('click', () => {resetChart(bars)});
+document.getElementById('run').addEventListener('click', () => {runAlgorithm(bars)});
+
+function addSelectOptions(options, selectID, text) {
+    const dropdown = document.getElementById(selectID);
+    options.forEach(item => {
+        let option = document.createElement('option');
+        option.text = item;
+        dropdown.add(option);
+    });
+    const defOption = document.createElement('option');
+    defOption.text = text;
+    defOption.selected = true;
+    defOption.disabled = true;
+    defOption.hidden = true;
+    dropdown.add(defOption);
+}
+
+function runAlgorithm(bars) {
+    const algorithm = document.getElementById('algorithmSelect');
+    const alg = algorithm.options[algorithm.selectedIndex].text;
+    switch (alg) {
+        case 'Merge Sort':
+            mergeSort(bars);
+            break;
+    }
+}
 
 function resetChart(len) {
     const grid = document.getElementById('chartGrid');
@@ -18,8 +46,8 @@ function populateChart(nums) {
     for (const num of nums) {
         const bar = document.createElement('div');
         bar.classList.add('bar');
-        bar.title = num.toString() + '%';
-        bar.style.cssText = '--bar-value:' + bar.title;
+        bar.title = num.toString();
+        bar.style.cssText = '--bar-value:' + bar.title + '%';
         bar.id = i.toString();
         grid.appendChild(bar);
         i++;
