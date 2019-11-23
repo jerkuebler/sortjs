@@ -1,0 +1,41 @@
+:root {
+    --grid-color: #aaa;
+    --bar-color: #403f82;
+    --bar-thickness: 5px;
+    --bar-rounded: 3px;
+    --bar-spacing: 3px;
+}
+
+.chart-wrap {
+    margin: auto;
+    height: auto;
+    width: 650px;
+}
+
+.chart-wrap .title {
+    font-weight: bold;
+    font-size: 1.62em;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.chart-wrap .grid {
+    position: relative;
+    padding: 5px 0 5px 0;
+    height:100%;
+    width:100%;
+    border-left: 2px solid var(--grid-color);
+    background: repeating-linear-gradient(90deg, transparent, transparent 19.5%, rgba(170,170,170,0.7) 20%);
+}
+
+.chart-wrap .bar {
+    width: var(--bar-value);
+    height: var(--bar-thickness);
+    margin: var(--bar-spacing) 0;
+    background-color: var(--bar-color);
+    border-radius: 0 var(--bar-rounded) var(--bar-rounded) 0;
+}
+
+.chart-wrap .bar:hover {
+    opacity: 0.7;
+}
