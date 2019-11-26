@@ -1,4 +1,4 @@
-const algorithms = ['Merge Sort'];
+const algorithms = ['Merge Sort', 'Quicksort'];
 addSelectOptions(algorithms, 'algorithmSelect', "Choose Algorithm");
 
 const bars = 50;
@@ -27,7 +27,10 @@ function runAlgorithm(bars) {
     const alg = algorithm.options[algorithm.selectedIndex].text;
     switch (alg) {
         case 'Merge Sort':
-            mergeSort(bars);
+            mergeSort(bars).then();
+            break;
+        case 'Quicksort':
+            quickSort(bars).then();
             break;
     }
 }

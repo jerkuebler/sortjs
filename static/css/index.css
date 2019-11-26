@@ -41,5 +41,9 @@
 }
 
 .chart-wrap .bar.active {
-    background-color: #1e7e34;
+    background-color: #337e5c;
+}
+
+.chart-wrap .bar.pivot {
+    background-color: #26d5e2;
 }
