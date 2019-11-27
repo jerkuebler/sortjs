@@ -1,4 +1,4 @@
-const algorithms = ['Merge Sort', 'Quicksort'];
+const algorithms = ['Mergesort', 'Quicksort', 'Heapsort'];
 addSelectOptions(algorithms, 'algorithmSelect', "Choose Algorithm");
 
 const bars = 50;
@@ -26,11 +26,14 @@ function runAlgorithm(bars) {
     const algorithm = document.getElementById('algorithmSelect');
     const alg = algorithm.options[algorithm.selectedIndex].text;
     switch (alg) {
-        case 'Merge Sort':
+        case 'Mergesort':
             mergeSort(bars).then();
             break;
         case 'Quicksort':
             quickSort(bars).then();
+            break;
+        case 'Heapsort':
+            heapSort(bars).then();
             break;
     }
 }
