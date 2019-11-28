@@ -27,12 +27,12 @@ async function mergeSort(chartLen) {
         for (let k = left; k < right; k++) {
             if (l < middle && (r >= right || arrA[l][1] <= arrA[r][1])) {
                 const leftEl = document.getElementById(arrA[l][0]);
-                moveDivInGrid(leftEl, k);
+                divMove(leftEl, k);
                 arrB[k] = arrA[l];
                 l++;
             } else {
                 const rightEl = document.getElementById(arrA[r][0]);
-                moveDivInGrid(rightEl, k);
+                divMove(rightEl, k);
                 arrB[k] = arrA[r];
                 r++
             }
@@ -67,19 +67,15 @@ async function quickSort(chartLen) {
 
         let i = begin;
         for (let j = begin; j <= end; j++) {
-            const temp = arr[i];
             if (arr[j][1] < pivot) {
-                swapDivInGrid(arr, i, j);
-                arr[i] = arr[j];
-                arr[j] = temp;
+                divSwap(arr, i, j);
+                arraySwap(arr, i, j);
                 i++;
                 await sleep(100);
             }
         }
-        swapDivInGrid(arr, i, end);
-        const temp = arr[i];
-        arr[i] = arr[end];
-        arr[end] = temp;
+        divSwap(arr, i, end);
+        arraySwap(arr, i, end);
 
         removeInactiveEls(activeEls);
 
@@ -99,10 +95,8 @@ async function heapSort(chartLen) {
     const _ = markActiveEls(values, 0, values.length);
     while (end > 0) {
         document.getElementById(values[0][0]).classList.add('pivot');
-        swapDivInGrid(values, 0, end);
-        const temp = values[end];
-        values[end] = values[0];
-        values[0] = temp;
+        divSwap(values, 0, end);
+        arraySwap(values, 0, end);
         await sleep(100);
         document.getElementById(values[end][0]).classList.remove('pivot');
         document.getElementById(values[end][0]).classList.remove('active');
@@ -142,10 +136,8 @@ async function heapSort(chartLen) {
             if (swap === root) {
                 return
             } else {
-                swapDivInGrid(values, root, swap);
-                const temp = values[root];
-                values[root] = values[swap];
-                values[swap] = temp;
+                divSwap(values, root, swap);
+                arraySwap(values, swap, root);
                 root = swap;
                 await sleep(100);
             }
@@ -165,6 +157,7 @@ async function bubbleSort(chartLen) {
         end--;
     }
     document.getElementById(values[end][0]).classList.remove('active');
+    console.log(values);
 
     async function bubble(arr, current) {
         for (let i=0; i < current; i++) {
@@ -173,15 +166,49 @@ async function bubbleSort(chartLen) {
                 left.classList.add('pivot');
                 const right = document.getElementById(arr[i+1][0]);
                 right.classList.add('pivot');
-                swapDivInGrid(arr, i, i + 1);
-                const temp = arr[i];
-                arr[i] = arr[i + 1];
-                arr[i + 1] = temp;
+                divSwap(arr, i, i + 1);
+                arraySwap(arr, i, i+1);
                 await sleep(50);
                 left.classList.remove('pivot');
                 right.classList.remove('pivot');
             }
         }
+    }
+}
+
+async function insertionSort(chartLen) {
+
+    let values = collectValues(chartLen);
+
+    let end = 0;
+    const _ = markActiveEls(values, 1, chartLen);
+    while (end < chartLen - 1) {
+        const current = values[end + 1];
+        await insert(values, current, end);
+        document.getElementById(current[0]).classList.remove('active');
+        end++;
+    }
+    console.log(values);
+
+    async function insert(arr, curr, e) {
+        const currDiv = document.getElementById(curr[0]);
+        currDiv.classList.add('pivot');
+
+        for (let i = 0; i <= e; i++) {
+            const iEl = document.getElementById(arr[i][0]);
+            iEl.classList.add('pivot');
+            await sleep(50);
+            if (curr[1] < arr[i][1]) {
+                arrayMove(arr, e + 1, i);
+                const currDiv = document.getElementById(curr[0]);
+                divMove(currDiv, i);
+                iEl.classList.remove('pivot');
+                currDiv.classList.remove('pivot');
+                return
+            }
+            iEl.classList.remove('pivot');
+        }
+        currDiv.classList.remove('pivot');
     }
 }
 
@@ -232,14 +259,24 @@ function removeInactiveEls(activeEls) {
     }
 }
 
-function swapDivInGrid (arr, posA, posB) {
-    const aEl = document.getElementById(arr[posA][0]);
-    const bEl = document.getElementById(arr[posB][0]);
-    moveDivInGrid(aEl, posB);
-    moveDivInGrid(bEl, posA);
+function arrayMove(arr, oldIndex, newIndex) {
+    arr.splice(newIndex, 0, arr.splice(oldIndex, 1)[0]);
 }
 
-function moveDivInGrid (div, pos) {
+function arraySwap(arr, posA, posB) {
+    const temp = arr[posA];
+    arr[posA] = arr[posB];
+    arr[posB] = temp;
+}
+
+function divSwap (arr, posA, posB) {
+    const aEl = document.getElementById(arr[posA][0]);
+    const bEl = document.getElementById(arr[posB][0]);
+    divMove(aEl, posB);
+    divMove(bEl, posA);
+}
+
+function divMove (div, pos) {
     const grid = document.getElementById('chartGrid');
     if (pos === 0) {
         grid.insertAdjacentElement('afterbegin', div);
