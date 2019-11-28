@@ -1,4 +1,4 @@
-const algorithms = ['Mergesort', 'Quicksort', 'Heapsort'];
+const algorithms = ['Mergesort', 'Quicksort', 'Heapsort', 'Bubblesort'];
 addSelectOptions(algorithms, 'algorithmSelect', "Choose Algorithm");
 
 const bars = 50;
@@ -34,6 +34,9 @@ function runAlgorithm(bars) {
             break;
         case 'Heapsort':
             heapSort(bars).then();
+            break;
+        case 'Bubblesort':
+            bubbleSort(bars).then();
             break;
     }
 }

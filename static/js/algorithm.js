@@ -153,6 +153,38 @@ async function heapSort(chartLen) {
     }
 }
 
+async function bubbleSort(chartLen) {
+
+    let values = collectValues(chartLen);
+
+    let end = chartLen - 1;
+    markActiveEls(values, 0, chartLen);
+    while (end > 0) {
+        await bubble(values, end);
+        document.getElementById(values[end][0]).classList.remove('active');
+        end--;
+    }
+    document.getElementById(values[end][0]).classList.remove('active');
+
+    async function bubble(arr, current) {
+        for (let i=0; i < current; i++) {
+            if (arr[i][1] > arr[i + 1][1]) {
+                const left = document.getElementById(arr[i][0]);
+                left.classList.add('pivot');
+                const right = document.getElementById(arr[i+1][0]);
+                right.classList.add('pivot');
+                swapDivInGrid(arr, i, i + 1);
+                const temp = arr[i];
+                arr[i] = arr[i + 1];
+                arr[i + 1] = temp;
+                await sleep(50);
+                left.classList.remove('pivot');
+                right.classList.remove('pivot');
+            }
+        }
+    }
+}
+
 function iChild(num, left) {
     if (left) {
         return num * 2 + 1;
