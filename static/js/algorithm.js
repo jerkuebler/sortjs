@@ -1,11 +1,9 @@
-async function mergeSort(chartLen) {
-
-    let values = collectValues(chartLen);
+async function mergeSort(values) {
 
     let sortedValues = [...values];
 
     /* run function on array */
-    await separate(0, chartLen, values, sortedValues);
+    await separate(0, values.length, values, sortedValues);
     console.log(values);
 
     /* function to run recursively to separate sets, order, then merge */
@@ -42,9 +40,7 @@ async function mergeSort(chartLen) {
     }
 }
 
-async function quickSort(chartLen) {
-
-    let values = collectValues(chartLen);
+async function quickSort(values) {
 
     await qSort(values, 0, values.length - 1);
     console.log(values);
@@ -85,14 +81,12 @@ async function quickSort(chartLen) {
     }
 }
 
-async function heapSort(chartLen) {
-
-    let values = collectValues(chartLen);
+async function heapSort(values) {
 
     await heapify(values, values.length);
 
     let end = values.length - 1;
-    const _ = markActiveEls(values, 0, values.length);
+    markActiveEls(values, 0, values.length);
     while (end > 0) {
         document.getElementById(values[0][0]).classList.add('pivot');
         divSwap(values, 0, end);
@@ -145,12 +139,10 @@ async function heapSort(chartLen) {
     }
 }
 
-async function bubbleSort(chartLen) {
+async function bubbleSort(values) {
 
-    let values = collectValues(chartLen);
-
-    let end = chartLen - 1;
-    markActiveEls(values, 0, chartLen);
+    let end = values.length - 1;
+    markActiveEls(values, 0, end + 1);
     while (end > 0) {
         await bubble(values, end);
         document.getElementById(values[end][0]).classList.remove('active');
@@ -176,13 +168,11 @@ async function bubbleSort(chartLen) {
     }
 }
 
-async function insertionSort(chartLen) {
-
-    let values = collectValues(chartLen);
+async function insertionSort(values) {
 
     let end = 0;
-    const _ = markActiveEls(values, 1, chartLen);
-    while (end < chartLen - 1) {
+    markActiveEls(values, 1, values.length);
+    while (end < values.length - 1) {
         const current = values[end + 1];
         await insert(values, current, end);
         document.getElementById(current[0]).classList.remove('active');
@@ -190,16 +180,16 @@ async function insertionSort(chartLen) {
     }
     console.log(values);
 
-    async function insert(arr, curr, e) {
+    async function insert(arr, curr, right) {
         const currDiv = document.getElementById(curr[0]);
         currDiv.classList.add('pivot');
 
-        for (let i = 0; i <= e; i++) {
+        for (let i = 0; i <= right; i++) {
             const iEl = document.getElementById(arr[i][0]);
             iEl.classList.add('pivot');
             await sleep(50);
             if (curr[1] < arr[i][1]) {
-                arrayMove(arr, e + 1, i);
+                arrayMove(arr, right + 1, i);
                 const currDiv = document.getElementById(curr[0]);
                 divMove(currDiv, i);
                 iEl.classList.remove('pivot');
@@ -209,6 +199,39 @@ async function insertionSort(chartLen) {
             iEl.classList.remove('pivot');
         }
         currDiv.classList.remove('pivot');
+    }
+}
+
+async function selectionSort(values) {
+
+    let begin = 0;
+    const end = values.length;
+
+    markActiveEls(values, 0, end);
+    while (begin < end) {
+        await select(values, begin, end);
+        begin++;
+    }
+    console.log(values);
+
+    async function select(arr, left, right) {
+        let lowest = arr[left];
+        document.getElementById(lowest[0]).classList.add('pivot');
+        let iLowest = 0;
+        for (let i = left; i < right; i++) {
+            if (arr[i][1] < lowest[1]) {
+                document.getElementById(lowest[0]).classList.remove('pivot');
+                lowest = arr[i];
+                iLowest = i;
+                document.getElementById(lowest[0]).classList.add('pivot');
+                await sleep(100);
+            }
+        }
+        const lowestEl = document.getElementById(lowest[0]);
+        arrayMove(arr, iLowest, left);
+        divMove(lowestEl, begin);
+        lowestEl.classList.remove('pivot');
+        lowestEl.classList.remove('active');
     }
 }
 
@@ -229,17 +252,6 @@ function iParent(num) {
     } else if (num % 2 === 0) {
         return num / 2 - 1;
     }
-}
-
-function collectValues(chartLen){
-    /* collect the IDs and values of each bar */
-    let values = [];
-    for (let i=0; i<chartLen; i++) {
-        const barID = i.toString();
-        const barValue = Number(document.getElementById(barID).title);
-        values.push([barID, barValue]);
-    }
-    return values;
 }
 
 function markActiveEls(arr, begin, end) {
