@@ -4,6 +4,7 @@
     --bar-thickness: 5px;
     --bar-rounded: 3px;
     --bar-spacing: 5px;
+    --bar-value: 0;
 }
 
 .chart-wrap {
